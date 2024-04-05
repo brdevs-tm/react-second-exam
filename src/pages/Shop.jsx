@@ -1,0 +1,91 @@
+import React, { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
+import AboutProduct from "../components/AboutProduct";
+
+const NavbarLink = ({ to, children }) => (
+  <NavLink
+    to={to}
+    className="text-[16px] font-[500] relative inline-block py-2 transition-all duration-300 group hover:text-green-500"
+  >
+    {children}
+    <span className="absolute inset-x-0 bottom-0 h-0.5 bg-green-500 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
+  </NavLink>
+);
+
+const Shop = () => {
+  const [products, setProducts] = useState([]);
+  const [cartCount, setCartCount] = useState(0); // State for cart count
+  const [relatedProducts, setRelatedProducts] = useState([]); // State for related products
+
+  useEffect(() => {
+    // Fetch data from localhost:3000/data
+    fetch("http://localhost:3000/data")
+      .then((response) => response.json())
+      .then((data) => setProducts(data))
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
+  useEffect(() => {
+    // Filter products based on the family of the fetched product
+    if (products.length > 0) {
+      const fetchedProductFamily = products[0].family;
+      const filteredProducts = products.filter(
+        (product) => product.family === fetchedProductFamily
+      );
+      setRelatedProducts(filteredProducts.slice(1)); // Exclude the fetched product itself
+    }
+  }, [products]);
+
+  // Function to add an item to the cart
+  const addToCart = () => {
+    setCartCount((prevCount) => prevCount + 1); // Increment cart count
+  };
+
+  return (
+    <div className="container mt-32">
+      <div className="breadcrumb flex items-center gap-2">
+        <NavbarLink to="/">Home</NavbarLink>
+        <span>/</span>
+        <NavbarLink to="/shop">Shop</NavbarLink>
+      </div>
+      <div className="about-product">
+        {products.length > 0 && (
+          <AboutProduct product={products[0]} addToCart={addToCart} />
+        )}
+      </div>
+      <div className="mt-[100px] related-plants flex flex-col gap-5">
+        <h1 className="text-green-500 font-[500]">Related Plants</h1>
+        <div className="flex">
+          <span className="w-full bg-green-500 h-[3px]"></span>
+        </div>
+        <div className="flex flex-wrap items-center gap-5">
+          {relatedProducts.map((product, index) => (
+            <div
+              key={index}
+              className="flex flex-col border rounded-[25px] transition-all duration-300 hover:border-green-400 "
+            >
+              <div className="card-body ">
+                <img
+                  src={product.image_url}
+                  style={{
+                    objectFit: "cover",
+                    width: "250px",
+                    height: "300px",
+                  }}
+                  alt="product"
+                  className="transition-all duration-200 hover:-translate-y-2 rounded-[25px]"
+                />
+              </div>
+              <div className="card-footer flex flex-col px-4 py-4 bg-gray-100 bg-opacity-50">
+                <span className="name">{product.common_name}</span>
+                <span className="family">{product.family}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Shop;
