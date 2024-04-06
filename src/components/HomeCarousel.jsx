@@ -16,15 +16,15 @@ const HomeCarousel = ({ slides }) => {
 
   return (
     <div className="relative home-carousel flex flex-col mt-5 ">
-      <div className=" slides bg-gray-100 bg-opacity-50 p-10">
+      <div className="slides bg-gray-100 bg-opacity-50 p-10">
         {slides.map((slide, index) => (
           <div
             key={index}
             className="slide"
             style={{ display: index === currentIndex ? "block" : "none" }}
           >
-            <div className="slide-content flex items-center justify-between">
-              <div className="text-content flex items-start flex-col">
+            <div className="slide-content flex flex-col lg:flex-row lg:items-center lg:justify-between">
+              <div className="text-content flex items-start flex-col lg:w-[50%]">
                 <h2 className="text-gray-700 tracking-wider text-[14px] font-[500] uppercase">
                   {slide.slideHeader}
                 </h2>
@@ -38,7 +38,7 @@ const HomeCarousel = ({ slides }) => {
                           : ""
                       }
                     >
-                      {word}{" "}
+                      {word}
                     </span>
                   ))}
                 </p>
@@ -50,12 +50,14 @@ const HomeCarousel = ({ slides }) => {
                   {slide.buttonText}
                 </button>
               </div>
-              <div className="hidden image-content">{slide.icon}</div>
+              <div className="lg:w-[50%] lg:pl-10 lg:mt-0 mt-5">
+                {slide.icon}
+              </div>
             </div>
           </div>
         ))}
       </div>
-      <div className="absolute bottom-11 left-[50%] controls flex items-center justify-center gap-5">
+      <div className="absolute bottom-11 left-[50%] transform -translate-x-1/2 controls flex items-center justify-center gap-5">
         <button onClick={goToPrevSlide}>
           <Previous />
         </button>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Like } from "../assets/img/Icons";
 
-const AboutProduct = ({ product, addToCart }) => {
+const AboutProduct = ({ product }) => {
   const [count, setCount] = useState(0);
 
   const decrementCount = () => {
@@ -12,12 +12,6 @@ const AboutProduct = ({ product, addToCart }) => {
 
   const incrementCount = () => {
     setCount((prevCount) => prevCount + 1);
-  };
-
-  const handleAddToCart = () => {
-    addToCart(product, count); // Pass product and count to addToCart function
-    // Reset count to 0 after adding to cart
-    setCount(0);
   };
 
   return (
@@ -80,10 +74,7 @@ const AboutProduct = ({ product, addToCart }) => {
               </button>
             </div>
             <div className="actions flex items-center gap-5">
-              <button
-                className="border border-green-500 bg-green-500 rounded-md text-white py-[11px] px-[32px]"
-                onClick={handleAddToCart}
-              >
+              <button className="border border-green-500 bg-green-500 rounded-md text-white py-[11px] px-[32px]">
                 ADD TO CART
               </button>
               <button className="border border-green-500 bg-green-500 rounded-md text-white py-[11px] px-[32px]">

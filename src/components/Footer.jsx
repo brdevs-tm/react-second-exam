@@ -19,7 +19,7 @@ import {
 const Footer = () => {
   return (
     <footer className="container bg-gray-100 bg-opacity-50 mt-[100px]">
-      <section className="grid grid-cols-1 gap-5 sm:grid sm:grid-cols-2 sm:gap-5 xl:flex xl:items-start xl:justify-between px-[25px] py-[37px]">
+      <section className="grid grid-cols-1 gap-5 place-items-center sm:grid sm:grid-cols-2 sm:gap-5 xl:flex xl:items-start xl:justify-between px-[25px] py-[37px]">
         <div>
           <img src={footer1} alt="" />
         </div>
@@ -67,7 +67,7 @@ const Footer = () => {
           <a href="tel:+998907917119">+998 90 791 71 19</a>
         </div>
       </section>
-      <section className="grid grid-cols-1 gap-5 sm:grid sm:grid-cols-2 sm:gap-5 xl:flex xl:items-start xl:justify-between py-8 px-[25px]">
+      <section className="flex flex-col items-center gap-5 sm:grid sm:grid-cols-2 sm:gap-5 xl:flex xl:flex-row xl:items-start xl:justify-between py-8 px-[25px]">
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-[18px] font-[700]">Watering Garden</h1>
           <ul className="flex flex-col gap-3">

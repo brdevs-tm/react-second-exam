@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import HomeCarousel from "../components/HomeCarousel";
-import Product from "../components/Product";
 import slideImage from "../assets/img/slideImage.png";
+import { Link } from "react-router-dom";
+import Login from "../components/Login";
+import LoginModal from "../components/Login";
 
 const HomePage = () => {
+  document.title = "Home Page";
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortingOption, setSortingOption] = useState("default");
@@ -15,7 +18,6 @@ const HomePage = () => {
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
-        // Extract unique categories from products
         const uniqueCategories = [
           ...new Set(data.map((product) => product.family)),
         ];
@@ -52,21 +54,21 @@ const HomePage = () => {
       slideSpan:
         "We are an online plant shop offering a wide range of cheap and trendy plants. Use our plants to create a unique Urban Jungle. Order your favorite plants!",
       buttonText: "Shop Now",
-      icon: <img src={slideImage} alt="Slide" />, // Use the imported image directly
+      icon: <img src={slideImage} alt="Slide" />,
     },
     {
       slideHeader: "Welcome To GreenShop",
       slideText: "More information here",
       slideSpan: "Some additional details about this slide.",
       buttonText: "Learn More",
-      icon: <img src={slideImage} alt="Slide" />, // Use the imported image directly
+      icon: <img src={slideImage} alt="Slide" />,
     },
     {
       slideHeader: "Welcome To GreenShop",
       slideText: "More information here",
       slideSpan: "Some additional details about this slide.",
       buttonText: "More Information",
-      icon: <img src={slideImage} alt="Slide" />, // Use the imported image directly
+      icon: <img src={slideImage} alt="Slide" />,
     },
   ];
 
@@ -76,7 +78,6 @@ const HomePage = () => {
       <div className="header-home mb-[46px]">
         <HomeCarousel slides={slides} />
       </div>
-
       {/* Categories */}
       <div className="flex flex-col sm:flex-row gap-10 px-[18px] py-[14px]">
         <div className="sm:w-1/4 flex flex-col gap-5 bg-gray-100 bg-opacity-50 px-[18px] py-[14px]">
@@ -97,10 +98,9 @@ const HomePage = () => {
             ))}
           </div>
         </div>
-
         <div className="sm:w-3/4">
           {/* Product Sorting */}
-          <div className="flex items-start justify-between md:items-center">
+          <div className="flex flex-col items-start justify-between">
             <div className="flex flex-col md:flex-row md:items-center md:gap-[37px]">
               <div>
                 <h1 className="text-[15px] font-[400] relative inline-block py-2 transition-all duration-300 group hover:text-green-500">
@@ -115,7 +115,7 @@ const HomePage = () => {
                 </h1>
               </div>
               <div>
-                <h1 className="text-[15px] font-[400] relative inline-block py-2 transition-all duration-300 group hover:text-green-500">
+                <h1 className="text-[15px] font-[400]relative inline-block py-2 transition-all duration-300 group hover:text-green-500">
                   Sale
                   <span className="absolute inset-x-0 bottom-0 h-0.5 bg-green-500 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
                 </h1>
@@ -142,50 +142,57 @@ const HomePage = () => {
           </div>
           <div className="products-row grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 place-items-center mt-8 gap-y-5">
             {currentProducts.map((product) => (
-              <Product
-                key={product.id}
-                name={product.common_name}
-                family={product.family}
-                image={product.image_url}
-              />
+              <Link to={`/shop/${product.id}`} key={product.id}>
+                <div className="flex flex-col gap-3 bg-gray-100 bg-opacity-50 border border-t-4 border-b-4 transition-all duration-300 hover:border-t-4 hover:border-r-gray-100 hover:border-l-gray-100 hover:border-b-4 hover:border-green-500">
+                  <div className="card-body bg-gray-100 bg-opacity-50">
+                    <img
+                      src={product.image_url}
+                      style={{
+                        background: "transparent",
+                        width: "250px",
+                        height: "300px",
+                        objectFit: "cover",
+                      }}
+                      alt="product"
+                    />
+                  </div>
+                  <div className="card-footer gap-2 py-3 px-5">
+                    <span className="text-[16px] font-[400]">
+                      {product.common_name}
+                    </span>
+                    <h1 className="text-[18px] font-[700] text-green-500">
+                      {product.family}
+                    </h1>
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
           <div className="pagination flex items-center gap-3 mt-5 justify-center">
             <button
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}
-              className={`flex items-center justify-center w-10 h-10 bg-white border border-gray-200 text-black font-[300] rounded-md transition-all duration-300 hover:bg-green-500 hover:border-green-500 hover:text-white ${
-                currentPage === 1 && "pointer-events-none opacity-50"
-              }`}
             >
               Prev
             </button>
-            {Array.from(
-              { length: Math.ceil(sortedProducts.length / productsPerPage) },
-              (_, i) => i + 1
-            ).map((number) => (
+            {Array.from({
+              length: Math.ceil(products.length / productsPerPage),
+            }).map((_, index) => (
               <button
-                key={number}
-                onClick={() => paginate(number)}
-                className={`flex items-center justify-center w-10 h-10 bg-white border border-gray-200 text-black font-[300] rounded-md transition-all duration-300 hover:bg-green-500 hover:border-green-500 hover:text-white ${
-                  currentPage === number &&
-                  "bg-green-500 border-green-500 text-black"
+                key={index}
+                onClick={() => paginate(index + 1)}
+                className={`pagination-item ${
+                  currentPage === index + 1 ? "active" : ""
                 }`}
               >
-                {number}
+                {index + 1}
               </button>
             ))}
             <button
               onClick={() => paginate(currentPage + 1)}
               disabled={
-                currentPage ===
-                Math.ceil(sortedProducts.length / productsPerPage)
+                currentPage === Math.ceil(products.length / productsPerPage)
               }
-              className={`flex items-center justify-center w-10 h-10 bg-white border border-gray-200 text-black font-[300] rounded-md transition-all duration-300 hover:bg-green-500 hover:border-green-500 hover:text-white ${
-                currentPage ===
-                  Math.ceil(sortedProducts.length / productsPerPage) &&
-                "pointer-events-none opacity-50"
-              }`}
             >
               Next
             </button>
